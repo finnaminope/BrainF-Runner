@@ -6,18 +6,16 @@ import warnings
 import pickle
 
 class BulidProgFunctions:
-  def loadSyntaxFile(inputfile=""):
+  def loadSyntaxFile(inputFile=""):
     try:
-      inputFile = inputfile + '.CBFASSF'
       fd = open(inputFile, 'rb')
       dataset = pickle.load(fd)
       return dataset
     except FileNotFoundError:
-      print("Error: Cannot Find Syntax File. Creating Syntax File now")
       syntaxBase = {"LC":"}"}
       fd = open(inputFile, 'wb')
       pickle.dump(syntaxBase, fd)
-      return False
+      warnings.warn("Syntax File Not Found. This May Cause Some Programs To Not Run Correctly")
 
   def RunFile(FileName, CBFASSF="Unnamed_syntax"):
     fd = open(FileName, 'r')
@@ -41,7 +39,7 @@ def evaluate(code, Syntax):
 
     if command == ">":
       cellptr += 1
-      if cellptr == len(cells) and not len(cells) == 255: cells.append(0) #set to a number higher than 0 to break all brainf programs
+      if cellptr == len(cells) and not len(cells) == 255: print("lol")#cells.append(0) #set to a number higher than 0 to break all brainf programs
 
     if command == "<":
       cellptr = 0 if cellptr <= 0 else cellptr - 1
@@ -49,8 +47,8 @@ def evaluate(code, Syntax):
     if command == "+":
       try:
         cells[cellptr] = cells[cellptr] + 1 if cells[cellptr] < 255 else 0
-      except Exception as Error:
-        print("runBfError: fatal: incError: " + Error)
+      except IndexError:
+        print("runBfError: fatal: incError: IndexError: Please report this bug to the Devloper.")
         print("codePointer:")
         print(codeptr)
         print("cellPointer:")
@@ -63,7 +61,7 @@ def evaluate(code, Syntax):
       try:
         cells[cellptr] = cells[cellptr] - 1 if cells[cellptr] > 0 else 255
       except IndexError:
-        print("runBfError: fatal: deincError: " + Error)
+        print("runBfError: fatal: deincError: IndexError: Please report this bug to the Devloper.")
         print("codePointer:")
         print(codeptr)
         print("cellPointer:")
